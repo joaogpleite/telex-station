@@ -1,0 +1,46 @@
+@font-face {
+    font-family: 'Perfect DOS VGA 437';
+    src: url('https://www.fonts4free.net/wp-content/fonts/p/Perfect-DOS-VGA-437/Perfect%20DOS%20VGA%20437.ttf') format('truetype');
+}
+
+body {
+    background-color: #000;
+    color: #0f0;
+    font-family: 'Perfect DOS VGA 437', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#terminal {
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#output p {
+    margin: 0;
+}
+
+.prompt-line {
+    display: flex;
+    align-items: center;
+}
+
+.prompt {
+    margin-right: 8px;
+}
+
+#command-line {
+    background-color: transparent;
+    border: none;
+    color: #0f0;
+    font-family: inherit;
+    font-size: inherit;
+    flex-grow: 1;
+    outline: none;
+}
+
+#command-line:focus {
+    outline: 1px solid #0f0;
+}
