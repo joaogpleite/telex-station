@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estação de Números - Telex</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+New:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #ffff00;
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ffff00;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+        
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+        
+        button:hover {
+            background: linear-gradient(45deg, #cc0000, #990000);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .stop-btn {
+            background: linear-gradient(45deg, #ffaa00, #ff8800) !important;
+        }
+        
+        .stop-btn:hover {
+            background: linear-gradient(45deg, #ff8800, #ff6600) !important;
+        }
+        
+        .telex-output {
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            padding: 20px;
+            min-height: 300px;
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .telex-header {
+            color: #ffff00;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .telex-content {
+            line-height: 1.8;
+            letter-spacing: 1px;
+        }
+        
+        .cursor {
+            display: inline-block;
+            background: #00ff00;
+            width: 8px;
+            height: 16px;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .status.transmitting {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+            border: 1px solid #ff0000;
+        }
+        
+        .status.ready {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+        
+        .frequency-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff00;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .frequency-display {
+                position: static;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="frequency-display">
+        <div>FREQ: 4625 kHz</div>
+        <div id="time"></div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>ESTAÇÃO DE NÚMEROS</h1>
+            <div class="subtitle">Sistema de Comunicação Telex Criptografado</div>
+        </div>
+        
+        <div class="form-section">
+            <div class="form-group">
+                <label for="callSign">Call Sign:</label>
+                <input type="text" id="callSign" placeholder="Ex: UVB-76, MDZhB, etc." maxlength="10">
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Mensagem:</label>
+                <textarea id="message" placeholder="Digite sua mensagem alfanumérica..." maxlength="500"></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="startTransmission()">🔊 TRANSMITIR</button>
+                <button onclick="stopTransmission()" class="stop-btn">⏹ PARAR</button>
+                <button onclick="clearOutput()">🗑 LIMPAR</button>
+            </div>
+        </div>
+        
+        <div id="status" class="status ready">SISTEMA PRONTO</div>
+        
+        <div class="telex-output">
+            <div class="telex-header">
+                === TERMINAL TELEX ATIVO ===<br>
+                AGUARDANDO TRANSMISSÃO...
+            </div>
+            <div id="telexContent" class="telex-content"></div>
+            <span class="cursor"></span>
+        </div>
+    </div>
+
+    <script>
+        let isTransmitting = false;
+        let transmissionInterval;
+        let audioContext;
+        let currentCharIndex = 0;
+        let currentMessage = '';
+        
+        // Inicializar contexto de áudio
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        // Gerar som de telex
+        function playTelexSound(frequency = 800, duration = 100) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = 'square';
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration / 1000);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration / 1000);
+        }
+        
+        // Atualizar relógio
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('pt-BR', {
+                hour12: false,
+                timeZone: 'UTC'
+            }) + ' UTC';
+            document.getElementById('time').textContent = timeStr;
+        }
+        
+        // Iniciar transmissão
+        function startTransmission() {
+            const callSign = document.getElementById('callSign').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            if (!callSign || !message) {
+                alert('Por favor, preencha o Call Sign e a mensagem.');
+                return;
+            }
+            
+            initAudio();
+            
+            if (isTransmitting) {
+                stopTransmission();
+                return;
+            }
+            
+            isTransmitting = true;
+            currentCharIndex = 0;
+            
+            // Preparar mensagem completa
+            const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            currentMessage = `
+=== INÍCIO DA TRANSMISSÃO ===
+CALL SIGN: ${callSign}
+TIMESTAMP: ${timestamp}
+MESSAGE: ${message}
+=== FIM DA TRANSMISSÃO ===
+
+`;
+            
+            // Atualizar status
+            document.getElementById('status').className = 'status transmitting';
+            document.getElementById('status').textContent = 'TRANSMITINDO...';
+            
+            // Limpar conteúdo anterior
+            document.getElementById('telexContent').innerHTML = '';
+            
+            // Iniciar transmissão caracter por caracter
+            transmissionInterval = setInterval(() => {
+                if (currentCharIndex < currentMessage.length) {
+                    const char = currentMessage[currentCharIndex];
+                    
+                    // Adicionar caracter ao display
+                    document.getElementById('telexContent').innerHTML += char === '\n' ? '<br>' : char;
+                    
+                    // Tocar som do telex
+                    if (char !== ' ' && char !== '\n') {
+                        playTelexSound(800 + Math.random() * 200, 80 + Math.random() * 40);
+                    }
+                    
+                    currentCharIndex++;
+                    
+                    // Scroll automático
+                    const telexOutput = document.querySelector('.telex-output');
+                    telexOutput.scrollTop = telexOutput.scrollHeight;
+                    
+                } else {
+                    stopTransmission();
+                }
+            }, 150 + Math.random() * 100); // Velocidade variável para simular telex real
+        }
+        
+        // Parar transmissão
+        function stopTransmission() {
+            isTransmitting = false;
+            if (transmissionInterval) {
+                clearInterval(transmissionInterval);
+            }
+            
+            document.getElementById('status').className = 'status ready';
+            document.getElementById('status').textContent = 'SISTEMA PRONTO';
+            
+            // Som final
+            setTimeout(() => playTelexSound(600, 200), 100);
+        }
+        
+        // Limpar saída
+        function clearOutput() {
+            if (isTransmitting) {
+                stopTransmission();
+            }
+            
+            document.getElementById('telexContent').innerHTML = '';
+            document.getElementById('status').className = 'status ready';
+            document.getElementById('status').textContent = 'SISTEMA PRONTO';
+        }
+        
+        // Inicialização
+        window.onload = function() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Permitir apenas caracteres alfanuméricos e alguns símbolos
+            document.getElementById('message').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^A-Za-z0-9\s\-\.\,\:\;\!\?]/g, '');
+            });
+            
+            document.getElementById('callSign').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^A-Za-z0-9\-]/g, '').toUpperCase();
+            });
+        };
+        
+        // Atalhos de teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                startTransmission();
+            } else if (e.key === 'Escape') {
+                stopTransmission();
+            }
+        });
+    </script>
+</body>
+</html>
