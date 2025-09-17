@@ -1,35 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-    <!-- Configurações básicas da página -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seu Título Aqui</title> <!-- Mude o título para o nome do seu projeto -->
-
-    <!-- Link para o arquivo CSS que cria o visual de terminal -->
-    <link rel="stylesheet" href="style.css">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Telex Station — Terminal</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <main class="app">
+    <header class="app-header">
+      <h1>TELEX STATION</h1>
+      <div class="controls">
+        <button id="load-sample">Load sample</button>
+        <button id="clear-paper">Clear</button>
+        <button id="toggle-sound">Mute</button>
+      </div>
+    </header>
 
-    <!-- =================================================================== -->
-    <!-- |                                                                 | -->
-    <!-- |    >>> COLOQUE TODO O SEU CONTEÚDO ORIGINAL AQUI DENTRO <<<     | -->
-    <!-- |                                                                 | -->
-    <!-- | Apague este comentário e cole aqui suas datas, textos, links,   | -->
-    <!-- | e toda a estrutura que você tinha antes.                        | -->
-    <!-- |                                                                 | -->
-    <!-- | Exemplo:                                                        | -->
-    <!-- | <h1>Meu Projeto</h1>                                             | -->
-    <!-- | <p>Informação de 20/09/2025: Texto importante.</p>               | -->
-    <!-- | <div>Outra seção com mais dados.</div>                          | -->
-    <!-- |                                                                 | -->
-    <!-- =================================================================== -->
+    <section id="paper-area" class="paper" tabindex="0" aria-label="Telex paper area">
+      <!-- Linhas e caracteres serão inseridos aqui -->
+    </section>
 
-    
+    <footer class="app-footer">
+      <small>Clique na área do papel e comece a digitar • Enter = nova linha • Backspace = apagar • Esc = limpar</small>
+    </footer>
+  </main>
 
-    <!-- Carrega o arquivo JavaScript para o efeito de som no final da página -->
-    <script src="script.js"></script>
+  <audio id="telex-sound" src="sound_telex.m4a" preload="auto"></audio>
 
+  <script src="script.js"></script>
 </body>
 </html>
