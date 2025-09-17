@@ -255,6 +255,21 @@
         let transmissionInterval;
         let currentCharIndex = 0;
         let currentMessage = '';
+        let telexAudio;
+        
+        // Carregar som do telex
+        function loadTelexSound() {
+            telexAudio = new Audio('som_telex.m4a');
+            telexAudio.preload = 'auto';
+        }
+        
+        // Reproduzir som do telex
+        function playTelexSound() {
+            if (telexAudio) {
+                telexAudio.currentTime = 0; // Reinicia o som
+                telexAudio.play().catch(e => console.log('Erro ao reproduzir áudio:', e));
+            }
+        }
         
         // Atualizar relógio
         function updateTime() {
@@ -369,6 +384,7 @@ ${message}
         window.onload = function() {
             updateTime();
             setInterval(updateTime, 1000);
+            loadTelexSound(); // Carregar o som do telex
             
             // Permitir apenas caracteres alfanuméricos e alguns símbolos
             document.getElementById('message').addEventListener('input', function(e) {
