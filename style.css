@@ -1,46 +1,117 @@
-@font-face {
-    font-family: 'Perfect DOS VGA 437';
-    src: url('https://www.fonts4free.net/wp-content/fonts/p/Perfect-DOS-VGA-437/Perfect%20DOS%20VGA%20437.ttf') format('truetype');
+:root{
+  --paper-bg: #f7f6f1;
+  --ink: #0b0b0b;
+  --paper-padding: 36px;
+  --line-height: 1.6;
+  --max-width: 900px;
+  --paper-width: 820px;
 }
 
-body {
-    background-color: #000;
-    color: #0f0;
-    font-family: 'Perfect DOS VGA 437', monospace;
-    font-size: 16px;
-    line-height: 1.5;
+*{box-sizing:border-box}
+
+html,body{
+  height:100%;
+  margin:0;
+  font-family: "Courier New", Courier, monospace;
+  background: #222;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--ink);
 }
 
-#terminal {
-    padding: 20px;
-    height: 100vh;
-    box-sizing: border-box;
-    overflow-y: auto;
+.app{
+  width: 100%;
+  max-width: calc(var(--max-width) + 80px);
+  margin: 20px;
 }
 
-#output p {
-    margin: 0;
+.app-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color: #ddd;
+  margin-bottom: 12px;
 }
 
-.prompt-line {
-    display: flex;
-    align-items: center;
+.app-header h1{
+  margin:0;
+  font-size:18px;
+  letter-spacing:2px;
+  color:#fff;
 }
 
-.prompt {
-    margin-right: 8px;
+.controls button{
+  margin-left:8px;
+  padding:6px 10px;
+  border-radius:4px;
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color:#fff;
+  cursor:pointer;
+  font-family:inherit;
 }
 
-#command-line {
-    background-color: transparent;
-    border: none;
-    color: #0f0;
-    font-family: inherit;
-    font-size: inherit;
-    flex-grow: 1;
-    outline: none;
+.controls button:active{transform:translateY(1px)}
+
+.paper{
+  background: linear-gradient(0deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.00) 2px);
+  background-color: var(--paper-bg);
+  width: var(--paper-width);
+  min-height: 540px;
+  border: 8px solid #e9e6dd;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.6);
+  padding: var(--paper-padding);
+  margin: 0 auto;
+  overflow: auto;
+  white-space: pre-wrap;
+  font-size: 18px;
+  line-height: var(--line-height);
+  color: var(--ink);
+  letter-spacing: 1px;
+  position: relative;
+  outline: none;
 }
 
-#command-line:focus {
-    outline: 1px solid #0f0;
+/* printed lines and characters */
+.line{
+  display:block;
+  width:100%;
+  min-height: 22px;
+}
+.char{
+  display:inline-block;
+  opacity:0;
+  transform: translateY(-6px) scale(0.98);
+  animation: stamp 120ms linear forwards;
+  font-variant-ligatures: none;
+  text-transform: uppercase;
+}
+
+/* slight variation for realism */
+.char.stamp-1{ animation-delay: 0ms;}
+.char.stamp-2{ animation-delay: 10ms;}
+.char.stamp-3{ animation-delay: 20ms;}
+.char.stamp-4{ animation-delay: 30ms;}
+
+@keyframes stamp{
+  to { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* caret for visual feedback */
+.paper:focus{
+  box-shadow: 0 30px 80px rgba(0,0,0,0.65);
+}
+
+/* footer */
+.app-footer{
+  text-align:center;
+  margin-top:12px;
+  color:#cfcfcf;
+  font-size:12px;
+}
+
+/* responsive */
+@media (max-width:960px){
+  .paper{ width: calc(100% - 40px); }
 }
